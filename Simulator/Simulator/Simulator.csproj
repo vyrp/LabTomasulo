@@ -56,6 +56,7 @@
     <Compile Include="src\Components\NullStation.cs" />
     <Compile Include="src\Components\RegisterStat.cs" />
     <Compile Include="src\Components\ReserveStation.cs" />
+    <Compile Include="src\Instructions\Mul.cs" />
     <Compile Include="src\Instructions\Add.cs" />
     <Compile Include="src\Instructions\IInstruction.cs" />
     <Compile Include="src\Simulator.cs" />

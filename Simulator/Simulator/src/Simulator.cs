@@ -73,8 +73,8 @@ namespace LabTomasulo
             Regs[3] = 3;
             Regs[5] = 5;
             Regs[6] = 6;
-            instructions.Add(new Add(3, 2, 1, this));
-            instructions.Add(new Add(6, 5, 4, this));
+            instructions.Add(new Mul(3, 2, 1, this));
+            instructions.Add(new Mul(6, 5, 4, this));
         }
 
         public void Next()

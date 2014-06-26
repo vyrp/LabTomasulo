@@ -35,7 +35,7 @@ namespace LabTomasulo
         public RegisterStat[] RegisterStat { get; private set; }
         public int Clock { get; private set; }
         public int PC { get; private set; }
-        public int CompletedInstructions { get; private set; }
+        public int CompletedInstructions { get; set; }
         
         public float CPI
         {
@@ -71,7 +71,10 @@ namespace LabTomasulo
 
             Regs[2] = 2;
             Regs[3] = 3;
+            Regs[5] = 5;
+            Regs[6] = 6;
             instructions.Add(new Add(3, 2, 1, this));
+            instructions.Add(new Add(6, 5, 4, this));
         }
 
         public void Next()
@@ -91,6 +94,8 @@ namespace LabTomasulo
             {
                 PC += 4;
             }
+
+            Clock++;
         }
 
         public void FastForward()

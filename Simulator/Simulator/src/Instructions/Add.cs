@@ -97,6 +97,7 @@ namespace LabTomasulo
 
             simulator.IsCDBFree = false;
             simulator.IsHardwareFree[(int)StationType.Add] = true;
+            simulator.CompletedInstructions++;
 
             for (int x = 0; x < RegisterStat.Length; x++)
             {

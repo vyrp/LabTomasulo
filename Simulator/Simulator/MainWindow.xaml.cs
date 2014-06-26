@@ -20,9 +20,17 @@ namespace LabTomasulo
     /// </summary>
     public partial class MainWindow : Window
     {
+        /* Fields */
+
+        private Simulator simulator;
+
+        /* Constructor */
+
         public MainWindow()
         {
             InitializeComponent();
+
+            simulator = new Simulator(); // Chamar funções nele
         }
     }
 }

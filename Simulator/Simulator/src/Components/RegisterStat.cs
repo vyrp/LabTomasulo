@@ -8,6 +8,6 @@ namespace LabTomasulo
 {
     struct RegisterStat
     {
-        public int Qi = 0;
+        public int Qi;
     }
 }

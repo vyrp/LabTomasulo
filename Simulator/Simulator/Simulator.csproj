@@ -53,6 +53,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\Components\RegisterStat.cs" />
+    <Compile Include="src\Components\ReserveStation.cs" />
+    <Compile Include="src\Instructions\IInstruction.cs" />
     <Compile Include="src\Simulator.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

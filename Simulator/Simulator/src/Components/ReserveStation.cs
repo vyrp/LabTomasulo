@@ -8,25 +8,55 @@ namespace LabTomasulo
 {
     class ReserveStation
     {
-        private static int counter = 0;
+        /* Fields */
 
         public readonly string ID;
-        public readonly string Type;
+        public readonly StationType Type;
         public IInstruction Instruction = null;
         public Phase Phase = Phase.None;
-        public bool Busy = false;
+        public bool busy = false;
         public int Vj = 0;
         public int Vk = 0;
         public int Qj = 0;
         public int Qk = 0;
         public int A = 0;
 
-        public ReserveStation(string Type)
+        /* Property */
+
+        public virtual bool Busy
         {
-            this.ID = "ER" + (++counter);
-            this.Type = Type;
+            get { return busy; }
+            set { busy = value; }
+        }
+
+        /* Constructor */
+
+        public ReserveStation(StationType type, int idx)
+        {
+            ID = "ER" + idx;
+            Type = type;
+        }
+
+        /* Public Methds */
+
+        public virtual void Execute()
+        {
+            if (Busy && Phase == Phase.Emitted && Instruction.TryExecute())
+            {
+                Phase = Phase.Executed;
+            }
+        }
+
+        public virtual void Write()
+        {
+            if (Busy && Phase == Phase.Executed && Instruction.TryWrite())
+            {
+                Phase = Phase.Written;
+            }
         }
     }
 
-    enum Phase { None, Emission, Execution, Writing }
+    enum Phase { None, Emitted, Executed, Written }
+
+    enum StationType { LoadStore, Add, Mult }
 }

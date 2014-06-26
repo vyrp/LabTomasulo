@@ -23,8 +23,12 @@ namespace LabTomasulo
         private List<IInstruction> instructions;
         private bool fileLoaded;
         private bool running;
+        private bool reachedEnd;
 
         /* Properties */
+
+        public bool[] IsHardwareFree { get; private set; }
+        public bool IsCDBFree { get; set; }
 
         public ReserveStation[] RS { get; private set; }
         public int[] Regs { get; private set; }
@@ -32,13 +36,20 @@ namespace LabTomasulo
         public int Clock { get; private set; }
         public int PC { get; private set; }
         public int CompletedInstructions { get; private set; }
-        public bool Completed { get; private set; }
-
+        
         public float CPI
         {
             get
             {
                 return CompletedInstructions > 0 ? ((float)Clock) / CompletedInstructions : float.NaN;
+            }
+        }
+
+        public bool Completed
+        {
+            get
+            {
+                return reachedEnd && RS.All(rs => !rs.Busy);
             }
         }
 
@@ -56,16 +67,35 @@ namespace LabTomasulo
             Initialize();
             fileLoaded = true;
 
+            // ...
+
+            Regs[2] = 2;
+            Regs[3] = 3;
+            instructions.Add(new Add(3, 2, 1, this));
         }
 
         public void Next()
         {
-            
+            // Order matters!
+
+            Array.ForEach(RS, station => station.Write());
+            IsCDBFree = true;
+
+            Array.ForEach(RS, station => station.Execute());
+
+            if (PC / 4 == instructions.Count)
+            {
+                reachedEnd = true;
+            }
+            else if (instructions[PC / 4].TryEmit())
+            {
+                PC += 4;
+            }
         }
 
         public void FastForward()
         {
-
+            // ...
         }
 
         public void Pause()
@@ -84,26 +114,30 @@ namespace LabTomasulo
             memory = new int[4 * 1024];
             instructions = new List<IInstruction>();
             fileLoaded = false;
-            Completed = false;
+            reachedEnd = false;
 
-            RS = new ReserveStation[ReserveStationsAmount];
+            IsHardwareFree = new[] { true, true, true };
+            IsCDBFree = true;
+
+            RS = new ReserveStation[ReserveStationsAmount+1];
             Regs = new int[RegistersAmount];
             RegisterStat = new RegisterStat[RegistersAmount];
             Clock = 0;
             PC = 0;
             CompletedInstructions = 0;
 
-            for (int i = 0; i < 5; i++)
+            RS[0] = new NullStation();
+            for (int i = 1; i <= 5; i++)
             {
-                RS[i] = new ReserveStation("Load/Store");
+                RS[i] = new ReserveStation(StationType.LoadStore, i);
             }
-            for (int i = 0; i < 3; i++)
+            for (int i = 1; i <= 3; i++)
             {
-                RS[5 + i] = new ReserveStation("Add");
+                RS[5 + i] = new ReserveStation(StationType.Add, 5 + i);
             }
-            for (int i = 0; i < 3; i++)
+            for (int i = 1; i <= 3; i++)
             {
-                RS[8 + i] = new ReserveStation("Mult");
+                RS[8 + i] = new ReserveStation(StationType.Mult, 8 + i);
             }
         }
     }

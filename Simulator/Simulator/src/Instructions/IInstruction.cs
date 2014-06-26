@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 
 namespace LabTomasulo
 {
-    // Provisiório
     interface IInstruction
     {
-        void Emit();
-        void Execute();
-        void Write();
+        bool TryEmit();
+        bool TryExecute();
+        bool TryWrite();
     }
 }

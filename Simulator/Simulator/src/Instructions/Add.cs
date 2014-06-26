@@ -130,7 +130,5 @@ namespace LabTomasulo
 
             return true;
         }
-
-        /* Private Methods */
     }
 }

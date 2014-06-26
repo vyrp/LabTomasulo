@@ -14,7 +14,7 @@ namespace LabTomasulo
     {
         /* Constants */
 
-        private const int ReserveStationsAmount = 11;
+        private const int ReserveStationsAmount = 12;
         private const int RegistersAmount = 32;
 
         /* Fields */
@@ -29,12 +29,13 @@ namespace LabTomasulo
 
         public bool[] IsHardwareFree { get; private set; }
         public bool IsCDBFree { get; set; }
+        public bool IsBranching { get; set; }
 
         public ReserveStation[] RS { get; private set; }
         public int[] Regs { get; private set; }
         public RegisterStat[] RegisterStat { get; private set; }
         public int Clock { get; private set; }
-        public int PC { get; private set; }
+        public int PC { get; set; }
         public int CompletedInstructions { get; set; }
         
         public float CPI
@@ -73,7 +74,10 @@ namespace LabTomasulo
             Regs[3] = 3;
             Regs[5] = 5;
             Regs[6] = 6;
+            Regs[8] = 8;
+            Regs[9] = 9;
             instructions.Add(new Mul(3, 2, 1, this));
+            instructions.Add(new Ble(9, 8, 0, this));
             instructions.Add(new Mul(6, 5, 4, this));
         }
 
@@ -90,7 +94,7 @@ namespace LabTomasulo
             {
                 reachedEnd = true;
             }
-            else if (instructions[PC / 4].TryEmit())
+            else if (!IsBranching && instructions[PC / 4].TryEmit())
             {
                 PC += 4;
             }
@@ -121,8 +125,9 @@ namespace LabTomasulo
             fileLoaded = false;
             reachedEnd = false;
 
-            IsHardwareFree = new[] { true, true, true };
+            IsHardwareFree = new[] { true, true, true, true };
             IsCDBFree = true;
+            IsBranching = false;
 
             RS = new ReserveStation[ReserveStationsAmount+1];
             Regs = new int[RegistersAmount];
@@ -143,6 +148,10 @@ namespace LabTomasulo
             for (int i = 1; i <= 3; i++)
             {
                 RS[8 + i] = new ReserveStation(StationType.Mult, 8 + i);
+            }
+            for (int i = 1; i <= 1; i++)
+            {
+                RS[11 + i] = new ReserveStation(StationType.Branch, 11 + i);
             }
         }
     }

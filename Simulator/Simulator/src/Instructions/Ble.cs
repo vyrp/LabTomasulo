@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LabTomasulo
 {
-    class Mul : IInstruction
+    class Ble : IInstruction
     {
         private const int Clocks = 3;
 
@@ -15,8 +15,8 @@ namespace LabTomasulo
         private int r;
         private int rs;
         private int rt;
-        private int rd;
-        private int result;
+        private int imm;
+        private bool result;
         private int passedClocks;
         private Simulator simulator;
         private ReserveStation[] RS;
@@ -25,11 +25,11 @@ namespace LabTomasulo
 
         /* Constructor */
 
-        public Mul(int rs, int rt, int rd, Simulator simulator)
+        public Ble(int rs, int rt, int imm, Simulator simulator)
         {
             this.rs = rs;
             this.rt = rt;
-            this.rd = rd;
+            this.imm = imm;
             this.simulator = simulator;
             this.passedClocks = 0;
 
@@ -44,7 +44,7 @@ namespace LabTomasulo
         {
             for (int i = 1; i < RS.Length; i++)
             {
-                if (RS[i].Type == StationType.Mult && !RS[i].Busy)
+                if (RS[i].Type == StationType.Branch && !RS[i].Busy)
                 {
                     r = i;
                     RS[r].Instruction = this;
@@ -71,8 +71,8 @@ namespace LabTomasulo
                     }
 
                     RS[r].Busy = true;
-                    RegisterStat[rd].Qi = r;
 
+                    simulator.IsBranching = true;
                     return true;
                 }
             }
@@ -82,60 +82,29 @@ namespace LabTomasulo
 
         public bool TryExecute()
         {
-            if (passedClocks == 0 && simulator.IsHardwareFree[(int)StationType.Mult] && RS[r].Qj == 0 && RS[r].Qk == 0)
+            if (simulator.IsHardwareFree[(int)StationType.Branch] && RS[r].Qj == 0 && RS[r].Qk == 0)
             {
-                simulator.IsHardwareFree[(int)StationType.Mult] = false;
-                result = RS[r].Vj * RS[r].Vk;
-                passedClocks++;
-            }
-            else if (passedClocks > 0)
-            {
-                passedClocks++;
+                simulator.IsHardwareFree[(int)StationType.Branch] = false;
+                result = RS[r].Vj <= RS[r].Vk;
+                return true;
             }
 
-            return passedClocks == Clocks;
+            return false;
         }
 
         public bool TryWrite()
         {
-            if (!simulator.IsCDBFree)
-            {
-                return false;
-            }
-
-            simulator.IsCDBFree = false;
-            simulator.IsHardwareFree[(int)StationType.Mult] = true;
+            simulator.IsHardwareFree[(int)StationType.Branch] = true;
             simulator.CompletedInstructions++;
 
-            for (int x = 0; x < RegisterStat.Length; x++)
+            if (result)
             {
-                if (RegisterStat[x].Qi == r)
-                {
-                    Regs[x] = result;
-                    RegisterStat[x].Qi = 0;
-                }
-            }
-
-            for (int x = 0; x < RS.Length; x++)
-            {
-                if (RS[x].Qj == r)
-                {
-                    RS[x].Vj = result;
-                    RS[x].Qj = 0;
-                }
-            }
-
-            for (int x = 0; x < RS.Length; x++)
-            {
-                if (RS[x].Qk == r)
-                {
-                    RS[x].Vk = result;
-                    RS[x].Qk = 0;
-                }
+                simulator.PC = imm;
             }
 
             RS[r].Busy = false;
 
+            simulator.IsBranching = false;
             return true;
         }
     }

@@ -58,5 +58,5 @@ namespace LabTomasulo
 
     enum Phase { None, Emitted, Executed, Written }
 
-    enum StationType { LoadStore, Add, Mult }
+    enum StationType { LoadStore, Add, Mult, Branch }
 }

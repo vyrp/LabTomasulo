@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,20 @@ namespace LabTomasulo
     /// </summary>
     /// 
 
+    public class Stations
+    {
+        public string ID { get; set; }
+        public string Type { get; set; }
+        public bool Busy { get; set; }
+        public string Instruction { get; set; }
+        public string State { get; set; }
+        public string Vj { get; set; }
+        public string Vk { get; set; }
+        public string Qj { get; set; }
+        public string Qk { get; set; }
+        public string A { get; set; }
+    }
+
     public partial class MainWindow : Window
     {
         /* Fields */
@@ -33,6 +48,11 @@ namespace LabTomasulo
         public MainWindow()
         {
             InitializeComponent();
+
+            PlayBtn.Content = "\u25B8";
+            StepBtn.Content = "\u25B8\u2759";
+            StopBtn.Content = "\u25FE";
+            PauseBtn.Content = "\u2759\u2759";
 
             simulator = new Simulator(); // Chamar funções nele
 
@@ -59,7 +79,10 @@ namespace LabTomasulo
 
         private void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Play");
+            ReserveStations.ItemsSource = simulator.RS.ToList();
+            Registers.ItemsSource = simulator.RegisterStat.ToList();
+            CurrentClock.ItemsSource = simulator.RS.ToList(); //Alterar essa parada
+            RecentMemory.ItemsSource = simulator.RegisterStat.ToList(); //Alterar essa parada
         }
 
         private void StepBtn_Click(object sender, RoutedEventArgs e)
@@ -76,6 +99,11 @@ namespace LabTomasulo
         {
             filePath = "Escolha um arquivo para compilar";
             FilePath_lbl.Content = filePath;
+        }
+
+        private void HelpBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Foi mal, ainda não posso te ajudar", "Help");
         }
 
 

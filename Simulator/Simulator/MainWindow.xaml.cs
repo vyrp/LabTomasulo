@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,11 +19,14 @@ namespace LabTomasulo
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+
     public partial class MainWindow : Window
     {
         /* Fields */
 
         private Simulator simulator;
+        public string filePath;
 
         /* Constructor */
 
@@ -31,6 +35,25 @@ namespace LabTomasulo
             InitializeComponent();
 
             simulator = new Simulator(); // Chamar funções nele
+        }
+
+        private void ExitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void OpenBtn_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.DefaultExt = ".txt";
+            openFileDialog.Filter = "Text documents|*.txt";
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                filePath = openFileDialog.FileName;
+                myTextBox.Text = filePath;
+            }
+
         }
     }
 }

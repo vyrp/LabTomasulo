@@ -35,6 +35,7 @@ namespace LabTomasulo
             InitializeComponent();
 
             simulator = new Simulator(); // Chamar funções nele
+
         }
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
@@ -51,9 +52,32 @@ namespace LabTomasulo
             if (openFileDialog.ShowDialog() == true)
             {
                 filePath = openFileDialog.FileName;
-                myTextBox.Text = filePath;
+                FilePath_lbl.Content = filePath;
             }
 
         }
+
+        private void PlayBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Play");
+        }
+
+        private void StepBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Step Forward");
+        }
+
+        private void PauseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Pause");
+        }
+
+        private void StopBtn_Click(object sender, RoutedEventArgs e)
+        {
+            filePath = "Escolha um arquivo para compilar";
+            FilePath_lbl.Content = filePath;
+        }
+
+
     }
 }

@@ -8,6 +8,8 @@ namespace LabTomasulo
 {
     class Add : IInstruction
     {
+        private const int HW = (int)StationType.Add;
+
         /* Fields */
 
         private int r;
@@ -78,9 +80,9 @@ namespace LabTomasulo
 
         public bool TryExecute()
         {
-            if (simulator.IsHardwareFree[(int)StationType.Add] && RS[r].Qj == 0 && RS[r].Qk == 0)
+            if (simulator.IsHardwareFree[HW] && RS[r].Qj == 0 && RS[r].Qk == 0)
             {
-                simulator.IsHardwareFree[(int)StationType.Add] = false;
+                simulator.IsHardwareFree[HW] = false;
                 result = RS[r].Vj + RS[r].Vk;
                 return true;
             }
@@ -96,7 +98,7 @@ namespace LabTomasulo
             }
 
             simulator.IsCDBFree = false;
-            simulator.IsHardwareFree[(int)StationType.Add] = true;
+            simulator.IsHardwareFree[HW] = true;
             simulator.CompletedInstructions++;
 
             for (int x = 0; x < RegisterStat.Length; x++)
@@ -129,6 +131,11 @@ namespace LabTomasulo
             RS[r].Busy = false;
 
             return true;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("ADD R{0}, R{1}, R{2}", rd, rs, rt);
         }
     }
 }

@@ -9,6 +9,7 @@ namespace LabTomasulo
     class Mul : IInstruction
     {
         private const int Clocks = 3;
+        private const int HW = (int)StationType.Mult;
 
         /* Fields */
 
@@ -82,9 +83,9 @@ namespace LabTomasulo
 
         public bool TryExecute()
         {
-            if (passedClocks == 0 && simulator.IsHardwareFree[(int)StationType.Mult] && RS[r].Qj == 0 && RS[r].Qk == 0)
+            if (passedClocks == 0 && simulator.IsHardwareFree[HW] && RS[r].Qj == 0 && RS[r].Qk == 0)
             {
-                simulator.IsHardwareFree[(int)StationType.Mult] = false;
+                simulator.IsHardwareFree[HW] = false;
                 result = RS[r].Vj * RS[r].Vk;
                 passedClocks++;
             }
@@ -104,7 +105,7 @@ namespace LabTomasulo
             }
 
             simulator.IsCDBFree = false;
-            simulator.IsHardwareFree[(int)StationType.Mult] = true;
+            simulator.IsHardwareFree[HW] = true;
             simulator.CompletedInstructions++;
 
             for (int x = 0; x < RegisterStat.Length; x++)
@@ -137,6 +138,11 @@ namespace LabTomasulo
             RS[r].Busy = false;
 
             return true;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("MUL R{0}, R{1}, R{2}", rd, rs, rt);
         }
     }
 }

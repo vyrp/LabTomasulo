@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace LabTomasulo
 {
-    class Ble : IInstruction
+    class Lw : IInstruction
     {
-        private const int Clocks = 3;
-        private const int HW = (int)StationType.Branch;
+        private const int Clocks = 4;
+        private const int HW = (int)StationType.LoadStore;
 
         /* Fields */
 
@@ -17,8 +17,9 @@ namespace LabTomasulo
         private int rs;
         private int rt;
         private int imm;
-        private bool result;
+        private int result;
         private int passedClocks;
+        private int phase;
         private Simulator simulator;
         private ReserveStation[] RS;
         private RegisterStat[] RegisterStat;
@@ -26,13 +27,14 @@ namespace LabTomasulo
 
         /* Constructor */
 
-        public Ble(int rs, int rt, int imm, Simulator simulator)
+        public Lw(int rs, int rt, int imm, Simulator simulator)
         {
             this.rs = rs;
             this.rt = rt;
             this.imm = imm;
             this.simulator = simulator;
             this.passedClocks = 0;
+            this.phase = 1;
 
             RS = simulator.RS;
             RegisterStat = simulator.RegisterStat;
@@ -45,11 +47,12 @@ namespace LabTomasulo
         {
             for (int i = 1; i < RS.Length; i++)
             {
-                if (RS[i].Type == StationType.Branch && !RS[i].Busy)
+                if (RS[i].Type == StationType.LoadStore && !RS[i].Busy)
                 {
                     r = i;
                     RS[r].Instruction = this;
                     RS[r].Phase = Phase.Emitted;
+                    simulator.EnqueueInBuffer(r);
 
                     if (RegisterStat[rs].Qi != 0)
                     {
@@ -61,19 +64,11 @@ namespace LabTomasulo
                         RS[r].Qj = 0;
                     }
 
-                    if (RegisterStat[rt].Qi != 0)
-                    {
-                        RS[r].Qk = RegisterStat[rt].Qi;
-                    }
-                    else
-                    {
-                        RS[r].Vk = Regs[rt];
-                        RS[r].Qk = 0;
-                    }
-
+                    RS[r].A = imm;
                     RS[r].Busy = true;
 
-                    simulator.IsBranching = true;
+                    RegisterStat[rt].Qi = r;
+
                     return true;
                 }
             }
@@ -83,35 +78,70 @@ namespace LabTomasulo
 
         public bool TryExecute()
         {
-            if (simulator.IsHardwareFree[HW] && RS[r].Qj == 0 && RS[r].Qk == 0)
+            if (phase == 1 && simulator.IsHardwareFree[HW] && RS[r].Qj == 0 && simulator.IsTopOfBuffer(r))
             {
                 simulator.IsHardwareFree[HW] = false;
-                result = RS[r].Vj <= RS[r].Vk;
-                return true;
+                RS[r].A = RS[r].Vj + RS[r].A;
+                phase++;
+            }
+            else if(phase == 2)
+            {
+                if (passedClocks == 0)
+                {
+                    result = simulator.GetMemoryAt(RS[r].A);
+                }
+                passedClocks++;
             }
 
-            return false;
+            return passedClocks == Clocks;
         }
 
         public bool TryWrite()
         {
+            if (!simulator.IsCDBFree)
+            {
+                return false;
+            }
+
+            simulator.IsCDBFree = false;
             simulator.IsHardwareFree[HW] = true;
             simulator.CompletedInstructions++;
 
-            if (result)
+            for (int x = 0; x < RegisterStat.Length; x++)
             {
-                simulator.PC = imm;
+                if (RegisterStat[x].Qi == r)
+                {
+                    Regs[x] = result;
+                    RegisterStat[x].Qi = 0;
+                }
+            }
+
+            for (int x = 0; x < RS.Length; x++)
+            {
+                if (RS[x].Qj == r)
+                {
+                    RS[x].Vj = result;
+                    RS[x].Qj = 0;
+                }
+            }
+
+            for (int x = 0; x < RS.Length; x++)
+            {
+                if (RS[x].Qk == r)
+                {
+                    RS[x].Vk = result;
+                    RS[x].Qk = 0;
+                }
             }
 
             RS[r].Busy = false;
 
-            simulator.IsBranching = false;
             return true;
         }
 
         public override string ToString()
         {
-            return string.Format("BLE R{0}, R{1}, {2}", rs, rt, imm);
+            return string.Format("LW R{0}, {1}(R{2})", rt, imm, rs);
         }
     }
 }

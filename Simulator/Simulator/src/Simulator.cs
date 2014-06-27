@@ -24,6 +24,7 @@ namespace LabTomasulo
         private bool fileLoaded;
         private bool running;
         private bool reachedEnd;
+        private Queue<int> bufferQueue;
 
         /* Properties */
 
@@ -115,6 +116,27 @@ namespace LabTomasulo
             }
         }
 
+        public void EnqueueInBuffer(int r)
+        {
+            bufferQueue.Enqueue(r);
+        }
+
+        public bool IsTopOfBuffer(int r)
+        {
+            bool result = false;
+            if (bufferQueue.Peek() == r)
+            {
+                result = true;
+                bufferQueue.Dequeue();
+            }
+            return result;
+        }
+
+        public int GetMemoryAt(int address)
+        {
+            return memory[address];
+        }
+
         /* Private Methods */
 
         private void Initialize()
@@ -128,6 +150,7 @@ namespace LabTomasulo
             IsHardwareFree = new[] { true, true, true, true };
             IsCDBFree = true;
             IsBranching = false;
+            bufferQueue = new Queue<int>();
 
             RS = new ReserveStation[ReserveStationsAmount+1];
             Regs = new int[RegistersAmount];

@@ -17,7 +17,7 @@ namespace LabTomasulo
     {
         /* Constants */
 
-        private const int ReserveStationsAmount = 12;
+        public const int ReserveStationsAmount = 12;
         private const int RegistersAmount = 32;
 
         private readonly IReadOnlyList<SI> stationsConfig = new List<SI>()
@@ -163,7 +163,7 @@ namespace LabTomasulo
             fileLoaded = false;
             reachedEnd = false;
 
-            IsHardwareFree = new[] { true, true, true, true };
+            IsHardwareFree = new[] { false, true, true, true, true };
             IsCDBFree = true;
             IsBranching = false;
             bufferQueue = new Queue<int>();
@@ -176,9 +176,13 @@ namespace LabTomasulo
             CompletedInstructions = 0;
 
             RS[0] = new NullStation();
-            for (int i = 1; i <= stationsConfig.Count; i++)
+            int i = 1;
+            foreach (var config in stationsConfig)
             {
-                RS[i] = new ReserveStation(stationsConfig[i].Key, stationsConfig[i].Value);
+                for (int j = 0; j < config.Value; j++)
+                {
+                    RS[i++] = new ReserveStation(config.Key, i-1);
+                }
             }
         }
     }

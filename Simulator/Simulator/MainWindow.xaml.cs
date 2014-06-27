@@ -20,28 +20,11 @@ namespace LabTomasulo
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    /// 
-
-    public class Stations
-    {
-        public string ID { get; set; }
-        public string Type { get; set; }
-        public bool Busy { get; set; }
-        public string Instruction { get; set; }
-        public string State { get; set; }
-        public string Vj { get; set; }
-        public string Vk { get; set; }
-        public string Qj { get; set; }
-        public string Qk { get; set; }
-        public string A { get; set; }
-    }
-
     public partial class MainWindow : Window
     {
         /* Fields */
 
         private Simulator simulator;
-        public string filePath;
 
         /* Constructor */
 
@@ -54,8 +37,7 @@ namespace LabTomasulo
             StopBtn.Content = "\u25FE";
             PauseBtn.Content = "\u2759\u2759";
 
-            simulator = new Simulator(); // Chamar funções nele
-
+            simulator = new Simulator();
         }
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
@@ -65,29 +47,26 @@ namespace LabTomasulo
 
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.DefaultExt = ".txt";
-            openFileDialog.Filter = "Text documents|*.txt";
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.DefaultExt = ".txt";
+            dialog.Filter = "Text documents|*.txt";
 
-            if (openFileDialog.ShowDialog() == true)
+            if (dialog.ShowDialog() == true)
             {
-                filePath = openFileDialog.FileName;
-                FilePath_lbl.Content = filePath;
+                FilePath_lbl.Content = dialog.FileName;
+                simulator.LoadFile(dialog.FileName);
             }
-
         }
 
         private void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
-            ReserveStations.ItemsSource = simulator.RS.ToList();
-            Registers.ItemsSource = simulator.RegisterStat.ToList();
-            CurrentClock.ItemsSource = simulator.RS.ToList(); //Alterar essa parada
-            RecentMemory.ItemsSource = simulator.RegisterStat.ToList(); //Alterar essa parada
+            UpdateValues();
         }
 
         private void StepBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Step Forward");
+            simulator.Next();
+            UpdateValues();
         }
 
         private void PauseBtn_Click(object sender, RoutedEventArgs e)
@@ -97,8 +76,7 @@ namespace LabTomasulo
 
         private void StopBtn_Click(object sender, RoutedEventArgs e)
         {
-            filePath = "Escolha um arquivo para compilar";
-            FilePath_lbl.Content = filePath;
+            FilePath_lbl.Content = "Escolha um arquivo para compilar";
         }
 
         private void HelpBtn_Click(object sender, RoutedEventArgs e)
@@ -106,6 +84,12 @@ namespace LabTomasulo
             MessageBox.Show("Foi mal, ainda não posso te ajudar", "Help");
         }
 
-
+        private void UpdateValues()
+        {
+            ReserveStations.ItemsSource = simulator.RS.Skip(1);
+            Registers.ItemsSource = null;
+            CurrentClock.ItemsSource = null;
+            RecentMemory.ItemsSource = null;
+        }
     }
 }

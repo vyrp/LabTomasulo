@@ -9,38 +9,30 @@ namespace LabTomasulo
     class ReserveStation
     {
         /* Fields */
-
-        public readonly string ID;
-        public readonly StationType Type;
+        
         public IInstruction instruction = null;
-        public Phase Phase = Phase.None;
-        public bool busy = false;
-        public int Vj = 0;
-        public int Vk = 0;
-        public int Qj = 0;
-        public int Qk = 0;
-        public int A = 0;
 
-        /* Property */
+        /* Properties */
 
-        public virtual bool Busy
-        {
-            get { return busy; }
-            set { busy = value; }
-        }
-
+        public string ID { get; private set; }
+        public StationType Type { get; private set; }
+        public virtual bool Busy { get; set; }
         public IInstruction Instruction
         {
-            get
-            {
-                return instruction;
-            }
+            get { return instruction; }
             set
             {
                 instruction = value;
                 Vj = Vk = Qj = Qk = A = 0;
             }
         }
+        public Phase Phase { get; set; }
+        public int Vj { get; set; }
+        public int Vk { get; set; }
+        public int Qj { get; set; }
+        public int Qk { get; set; }
+        public int A { get; set; }
+
 
         /* Constructor */
 
@@ -48,6 +40,9 @@ namespace LabTomasulo
         {
             ID = "ER" + idx;
             Type = type;
+            Phase = Phase.None;
+            Busy = false;
+            Instruction = null;
         }
 
         /* Public Methds */
@@ -67,9 +62,14 @@ namespace LabTomasulo
                 Phase = Phase.Written;
             }
         }
+
+        public override string ToString()
+        {
+            return ID + " (" + Type + ")";
+        }
     }
 
     enum Phase { None, Emitted, Executed, Written }
 
-    enum StationType { LoadStore, Add, Mult, Branch }
+    enum StationType { None, LoadStore, Add, Mult, Branch }
 }

@@ -17,14 +17,16 @@ using System.Windows.Shapes;
 
 namespace LabTomasulo
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    enum State { None, Ready, Running, Completed }
+
+    enum WindowAction { LoadFile, Step, Play, Pause, Stop, Time }
+
     public partial class MainWindow : Window
     {
         /* Fields */
 
         private Simulator simulator;
+        private State state = State.None;
 
         /* Constructor */
 
@@ -38,6 +40,27 @@ namespace LabTomasulo
             PauseBtn.Content = "\u2759\u2759";
 
             simulator = new Simulator();
+        }
+
+        private void UpdateState(WindowAction action)
+        {
+            if (state == State.None || state == State.Completed || state == State.Running && action != WindowAction.Time)
+            {
+                state = State.Ready;
+            }
+            else if (state == State.Ready && action == WindowAction.Step && simulator.Completed || state == State.Running && action == WindowAction.Time)
+            {
+                state = State.Completed;
+            }
+            else if (state == State.Ready && action == WindowAction.Play)
+            {
+                state = State.Running;
+            }
+
+            StepBtn.IsEnabled = (state == State.Ready);
+            PlayBtn.IsEnabled = (state == State.Ready);
+            PauseBtn.IsEnabled = (state == State.Running);
+            StopBtn.IsEnabled = (state != State.None);
         }
 
         private void ExitBtn_Click(object sender, RoutedEventArgs e)
@@ -55,28 +78,32 @@ namespace LabTomasulo
             {
                 FilePath_lbl.Content = dialog.FileName;
                 simulator.LoadFile(dialog.FileName);
+                UpdateValues();
+                UpdateState(WindowAction.LoadFile);
             }
         }
 
         private void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
             UpdateValues();
+            UpdateState(WindowAction.Play);
         }
 
         private void StepBtn_Click(object sender, RoutedEventArgs e)
         {
             simulator.Next();
             UpdateValues();
+            UpdateState(WindowAction.Step);
         }
 
         private void PauseBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Pause");
+            UpdateState(WindowAction.Pause);
         }
 
         private void StopBtn_Click(object sender, RoutedEventArgs e)
         {
-            FilePath_lbl.Content = "Escolha um arquivo para compilar";
+            UpdateState(WindowAction.Stop);
         }
 
         private void HelpBtn_Click(object sender, RoutedEventArgs e)

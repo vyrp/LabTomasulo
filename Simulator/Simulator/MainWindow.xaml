@@ -32,10 +32,10 @@
         <Rectangle Fill="#FFF4F4F5" Stroke="Black" Grid.Row="2"/>
         <Label x:Name="FilePath_lbl" Content="Escolha um arquivo para compilar." Grid.Row="2" Margin="0,1,219,0" VerticalContentAlignment="Center" Padding="25,5,5,5"/>
         <Grid Margin="758,0,0,0" Grid.Row="2">
-            <Button x:Name="PlayBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="PlayBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" Margin="0,0,150,0"/>
-            <Button x:Name="StepBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="StepBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" Margin="0,0,100,0"/>
-            <Button x:Name="PauseBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="PauseBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" Margin="0,0,50,0"/>
-            <Button x:Name="StopBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="StopBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50"/>
+            <Button x:Name="PlayBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="PlayBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" Margin="0,0,150,0" IsEnabled="False" IsCancel="True"/>
+            <Button x:Name="StepBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="StepBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" Margin="0,0,100,0" IsEnabled="False"/>
+            <Button x:Name="PauseBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="PauseBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" Margin="0,0,50,0" IsEnabled="False"/>
+            <Button x:Name="StopBtn" VerticalAlignment="Stretch" HorizontalAlignment="Right" Click="StopBtn_Click" FontSize="30" VerticalContentAlignment="Center" FontFamily="Arial Black" Width="50" IsEnabled="False"/>
         </Grid>
     </Grid>
 </Window>

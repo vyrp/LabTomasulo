@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LabTomasulo
 {
-    class Ble : IInstruction
+    class Bne : IInstruction
     {
         private const int HW = (int)StationType.Branch;
 
@@ -17,6 +17,7 @@ namespace LabTomasulo
         private int rt;
         private int imm;
         private bool result;
+        private int pc;
         private Simulator simulator;
         private ReserveStation[] RS;
         private RegisterStat[] RegisterStat;
@@ -24,7 +25,7 @@ namespace LabTomasulo
 
         /* Constructor */
 
-        public Ble(int rs, int rt, int imm, Simulator simulator)
+        public Bne(int rs, int rt, int imm, Simulator simulator)
         {
             this.rs = rs;
             this.rt = rt;
@@ -40,6 +41,7 @@ namespace LabTomasulo
 
         public bool TryEmit()
         {
+            pc = simulator.PC;
             for (int i = 1; i < RS.Length; i++)
             {
                 if (RS[i].Type == StationType.Branch && !RS[i].Busy)
@@ -83,7 +85,7 @@ namespace LabTomasulo
             if (simulator.IsHardwareFree[HW] && RS[r].Qj == 0 && RS[r].Qk == 0)
             {
                 simulator.IsHardwareFree[HW] = false;
-                result = (RS[r].Vj <= RS[r].Vk);
+                result = (RS[r].Vj != RS[r].Vk);
                 return true;
             }
 
@@ -97,7 +99,7 @@ namespace LabTomasulo
 
             if (result)
             {
-                simulator.PC = imm;
+                simulator.PC = pc + 4 + imm;
             }
 
             RS[r].Busy = false;
@@ -108,7 +110,7 @@ namespace LabTomasulo
 
         public override string ToString()
         {
-            return string.Format("BLE R{0}, R{1}, {2}", rs, rt, imm);
+            return string.Format("BNE R{0}, R{1}, {2}", rs, rt, imm);
         }
     }
 }

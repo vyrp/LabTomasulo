@@ -137,6 +137,11 @@ namespace LabTomasulo
             return memory[address];
         }
 
+        public void SetMemoryAt(int address, int value)
+        {
+            memory[address] = value;
+        }
+
         /* Private Methods */
 
         private void Initialize()

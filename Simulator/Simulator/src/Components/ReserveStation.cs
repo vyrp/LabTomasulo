@@ -12,7 +12,7 @@ namespace LabTomasulo
 
         public readonly string ID;
         public readonly StationType Type;
-        public IInstruction Instruction = null;
+        public IInstruction instruction = null;
         public Phase Phase = Phase.None;
         public bool busy = false;
         public int Vj = 0;
@@ -27,6 +27,19 @@ namespace LabTomasulo
         {
             get { return busy; }
             set { busy = value; }
+        }
+
+        public IInstruction Instruction
+        {
+            get
+            {
+                return instruction;
+            }
+            set
+            {
+                instruction = value;
+                Vj = Vk = Qj = Qk = A = 0;
+            }
         }
 
         /* Constructor */

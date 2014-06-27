@@ -57,6 +57,13 @@
     <Compile Include="src\Components\NullStation.cs" />
     <Compile Include="src\Components\RegisterStat.cs" />
     <Compile Include="src\Components\ReserveStation.cs" />
+    <Compile Include="src\Instructions\Sw.cs" />
+    <Compile Include="src\Instructions\Sub.cs" />
+    <Compile Include="src\Instructions\Addi.cs" />
+    <Compile Include="src\Instructions\Nop.cs" />
+    <Compile Include="src\Instructions\Jmp.cs" />
+    <Compile Include="src\Instructions\Bne.cs" />
+    <Compile Include="src\Instructions\Beq.cs" />
     <Compile Include="src\Instructions\Ble.cs" />
     <Compile Include="src\Instructions\Lw.cs" />
     <Compile Include="src\Instructions\Mul.cs" />

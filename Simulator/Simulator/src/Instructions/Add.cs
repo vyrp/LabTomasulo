@@ -13,14 +13,14 @@ namespace LabTomasulo
         /* Fields */
 
         private int r;
-        private int rs;
-        private int rt;
-        private int rd;
-        private int result;
-        private Simulator simulator;
-        private ReserveStation[] RS;
-        private RegisterStat[] RegisterStat;
-        private int[] Regs;
+        private int result; 
+        private readonly int rs;
+        private readonly int rt;
+        private readonly int rd;
+        private readonly Simulator simulator;
+        private readonly ReserveStation[] RS;
+        private readonly RegisterStat[] RegisterStat;
+        private readonly int[] Regs;
 
         /* Constructor */
 

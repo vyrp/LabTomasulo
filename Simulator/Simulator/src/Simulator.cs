@@ -2,11 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
+using SI = System.Collections.Generic.KeyValuePair<LabTomasulo.StationType, int>;
 
 namespace LabTomasulo
 {
@@ -16,6 +19,14 @@ namespace LabTomasulo
 
         private const int ReserveStationsAmount = 12;
         private const int RegistersAmount = 32;
+
+        private readonly IReadOnlyList<SI> stationsConfig = new List<SI>()
+        {
+            new SI(StationType.LoadStore, 5),
+            new SI(StationType.Add, 3),
+            new SI(StationType.Mult, 3),
+            new SI(StationType.Branch, 1),
+        };
 
         /* Fields */
 
@@ -165,21 +176,9 @@ namespace LabTomasulo
             CompletedInstructions = 0;
 
             RS[0] = new NullStation();
-            for (int i = 1; i <= 5; i++)
+            for (int i = 1; i <= stationsConfig.Count; i++)
             {
-                RS[i] = new ReserveStation(StationType.LoadStore, i);
-            }
-            for (int i = 1; i <= 3; i++)
-            {
-                RS[5 + i] = new ReserveStation(StationType.Add, 5 + i);
-            }
-            for (int i = 1; i <= 3; i++)
-            {
-                RS[8 + i] = new ReserveStation(StationType.Mult, 8 + i);
-            }
-            for (int i = 1; i <= 1; i++)
-            {
-                RS[11 + i] = new ReserveStation(StationType.Branch, 11 + i);
+                RS[i] = new ReserveStation(stationsConfig[i].Key, stationsConfig[i].Value);
             }
         }
     }

@@ -24,10 +24,10 @@ namespace LabTomasulo
 
         /* Constructor */
 
-        public Addi(int rt, int rs, int imm, Simulator simulator)
+        public Addi(int rs, int rt, int imm, Simulator simulator)
         {
-            this.rt = rt;
             this.rs = rs;
+            this.rt = rt;
             this.imm = imm;
             this.simulator = simulator;
 

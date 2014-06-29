@@ -25,7 +25,7 @@ namespace LabTomasulo
 
         /* Constructor */
 
-        public Sw(int rt, int imm, int rs, Simulator simulator)
+        public Sw(int rs, int rt, int imm, Simulator simulator)
         {
             this.rs = rs;
             this.rt = rt;

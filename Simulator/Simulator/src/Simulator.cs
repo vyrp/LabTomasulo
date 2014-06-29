@@ -78,19 +78,123 @@ namespace LabTomasulo
         public void LoadFile(string filename)
         {
             Initialize();
+
+            Console.WriteLine(filename);
+
+            string[] lines = System.IO.File.ReadAllLines(filename);
+
+            foreach (string line in lines) {
+                string opcode = line.Substring(0, 6);
+
+                IInstruction instruction = null;
+
+                switch (opcode)
+                {
+                    case "000000":
+                    {
+                        int rs, rt, rd;
+                        ParseInstructionTypeR(line, out rs, out rt, out rd);
+                        string shamt = line.Substring(21, 5);
+                        string function = line.Substring(26, 6);
+
+                        switch (function)
+                        {
+                            case "100000":
+                            {
+                                instruction = new Add(rs, rt, rd, this);
+                                break;
+                            }
+                            case "011000":
+                            {
+                                instruction = new Mul(rs, rt, rd, this);
+                                break;
+                            }
+                            case "000000":
+                            {
+                                instruction = new Nop();
+                                break;
+                            }
+                            case "100010":
+                            {
+                                instruction = new Sub(rs, rt, rd, this);
+                                break;
+                            }
+                        }
+                        break;
+                    }
+
+                    case "001000":
+                    {
+                        int rs, rt, imm;
+                        ParseInstructionTypeI(line, out rs, out rt, out imm);
+                        instruction = new Addi(rs, rt, imm, this);
+                        break;
+                    }
+                    case "000101":
+                    {
+                        int rs, rt, imm;
+                        ParseInstructionTypeI(line, out rs, out rt, out imm);
+                        instruction = new Beq(rs, rt, imm, this);
+                        break;
+                    }
+                    case "000111":
+                    {
+                        int rs, rt, imm;
+                        ParseInstructionTypeI(line, out rs, out rt, out imm);
+                        instruction = new Ble(rs, rt, imm, this);
+                        break;
+                    }
+                    case "000100":
+                    {
+                        int rs, rt, imm;
+                        ParseInstructionTypeI(line, out rs, out rt, out imm);
+                        instruction = new Ble(rs, rt, imm, this);
+                        break;
+                    }
+                    case "100011":
+                    {
+                        int rs, rt, imm;
+                        ParseInstructionTypeI(line, out rs, out rt, out imm);
+                        instruction = new Lw(rs, rt, imm, this);
+                        break;
+                    }
+                    case "101011":
+                    {
+                        int rs, rt, imm;
+                        ParseInstructionTypeI(line, out rs, out rt, out imm);
+                        instruction = new Sw(rs, rt, imm, this);
+                        break;
+                    }
+
+                    case "000010":
+                    {
+                        int targetAddr;
+                        ParseInstructionTypeJ(line, out targetAddr);
+                        instruction = new Jmp(targetAddr, this);
+                        break;
+                    }
+                }
+
+                instructions.Add(instruction);
+            }
+
+            foreach (IInstruction instruction in instructions) {
+                Console.WriteLine(instruction.ToString());
+            }
+
             fileLoaded = true;
 
             // ...
 
-            Regs[2] = 2;
-            Regs[3] = 3;
-            Regs[5] = 5;
-            Regs[6] = 6;
-            Regs[8] = 8;
-            Regs[9] = 9;
-            instructions.Add(new Mul(3, 2, 1, this));
-            instructions.Add(new Ble(9, 8, 0, this));
-            instructions.Add(new Mul(6, 5, 4, this));
+            // Regs[2] = 2;
+            // Regs[3] = 3;
+            // Regs[5] = 5;
+            // Regs[6] = 6;
+            // Regs[8] = 8;
+            // Regs[9] = 9;
+            // instructions.Add(new Mul(3, 2, 1, this));
+            // instructions.Add(new Ble(9, 8, 0, this));
+            // instructions.Add(new Mul(6, 5, 4, this));
         }
 
         public void Next()
@@ -184,6 +288,25 @@ namespace LabTomasulo
                     RS[i++] = new ReserveStation(config.Key, i-1);
                 }
             }
+        }
+
+        private void ParseInstructionTypeR(String line, out int rs, out int rt, out int rd)
+        {
+            rs = Convert.ToInt32(line.Substring(6, 5), 2);
+            rt = Convert.ToInt32(line.Substring(11, 5), 2);
+            rd = Convert.ToInt32(line.Substring(16, 5), 2);
+        }
+
+        private void ParseInstructionTypeI(String line, out int rs, out int rt, out int imm)
+        {
+            rs = Convert.ToInt32(line.Substring(6, 5), 2);
+            rt = Convert.ToInt32(line.Substring(11, 5), 2);
+            imm = Convert.ToInt32(line.Substring(18, 14), 2);
+        }
+
+        private void ParseInstructionTypeJ(String line, out int targetAddr)
+        {
+            targetAddr = Convert.ToInt32(line.Substring(6, 26), 2);
         }
     }
 }

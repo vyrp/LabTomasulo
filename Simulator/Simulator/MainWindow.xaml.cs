@@ -71,8 +71,6 @@ namespace LabTomasulo
         private void OpenBtn_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.DefaultExt = ".txt";
-            dialog.Filter = "Text documents|*.txt";
 
             if (dialog.ShowDialog() == true)
             {

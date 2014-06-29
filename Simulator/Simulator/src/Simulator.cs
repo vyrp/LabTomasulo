@@ -32,8 +32,6 @@ namespace LabTomasulo
 
         private int[] memory;
         private List<IInstruction> instructions;
-        private bool fileLoaded;
-        private bool running;
         private bool reachedEnd;
         private Queue<int> bufferQueue;
 
@@ -79,9 +77,7 @@ namespace LabTomasulo
         {
             Initialize();
 
-            Console.WriteLine(filename);
-
-            string[] lines = System.IO.File.ReadAllLines(filename);
+            string[] lines = File.ReadAllLines(filename);
 
             foreach (string line in lines) {
                 string opcode = line.Substring(0, 6);
@@ -177,24 +173,6 @@ namespace LabTomasulo
 
                 instructions.Add(instruction);
             }
-
-            foreach (IInstruction instruction in instructions) {
-                Console.WriteLine(instruction.ToString());
-            }
-
-            fileLoaded = true;
-
-            // ...
-
-            // Regs[2] = 2;
-            // Regs[3] = 3;
-            // Regs[5] = 5;
-            // Regs[6] = 6;
-            // Regs[8] = 8;
-            // Regs[9] = 9;
-            // instructions.Add(new Mul(3, 2, 1, this));
-            // instructions.Add(new Ble(9, 8, 0, this));
-            // instructions.Add(new Mul(6, 5, 4, this));
         }
 
         public void Next()
@@ -216,19 +194,6 @@ namespace LabTomasulo
             }
 
             Clock++;
-        }
-
-        public void FastForward()
-        {
-            // ...
-        }
-
-        public void Pause()
-        {
-            lock (this)
-            {
-                running = false;
-            }
         }
 
         public void EnqueueInBuffer(int r)
@@ -261,10 +226,8 @@ namespace LabTomasulo
 
         private void Initialize()
         {
-            running = false;
             memory = new int[4 * 1024];
             instructions = new List<IInstruction>();
-            fileLoaded = false;
             reachedEnd = false;
 
             IsHardwareFree = new[] { false, true, true, true, true };
@@ -301,7 +264,7 @@ namespace LabTomasulo
         {
             rs = Convert.ToInt32(line.Substring(6, 5), 2);
             rt = Convert.ToInt32(line.Substring(11, 5), 2);
-            imm = Convert.ToInt32(line.Substring(18, 14), 2);
+            imm = Convert.ToInt16(line.Substring(16, 16), 2);
         }
 
         private void ParseInstructionTypeJ(String line, out int targetAddr)

@@ -54,6 +54,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="src\Cache\Cache.cs" />
+    <Compile Include="src\Cache\FIFOReplacementPolicy.cs" />
+    <Compile Include="src\Cache\IReplacementPolicy.cs" />
+    <Compile Include="src\Cache\LRUReplacementPolicy.cs" />
+    <Compile Include="src\Cache\MainMemory.cs" />
+    <Compile Include="src\Cache\MemoryUnit.cs" />
     <Compile Include="src\Components\NullStation.cs" />
     <Compile Include="src\Components\RecentMemory.cs" />
     <Compile Include="src\Components\RegisterStat.cs" />

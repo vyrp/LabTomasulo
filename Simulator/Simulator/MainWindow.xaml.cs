@@ -32,6 +32,7 @@ namespace LabTomasulo
         private State state = State.None;
         private Label[] Qis = new Label[32];
         private Label[] Vis = new Label[32];
+        private Label[,] recentMemoryAccesses = new Label[Simulator.RecentMemorySize, 2];
         private bool allowedToRun;
         private string fileName;
 
@@ -71,6 +72,21 @@ namespace LabTomasulo
                 Grid.SetColumn(Vis[i], i / 8 * 3 + 2);
                 Grid.SetRow(Vis[i], i % 8 + 2);
                 Registers.Children.Add(Vis[i]);
+            }
+            #endregion
+
+            #region Recent Memory
+            for (int i = 0; i < Simulator.RecentMemorySize; i++)
+            {
+                recentMemoryAccesses[i, 0] = new Label() { Content = "-" };
+                Grid.SetColumn(recentMemoryAccesses[i, 0], 0);
+                Grid.SetRow(recentMemoryAccesses[i, 0], i + 2);
+                RecentMemory.Children.Add(recentMemoryAccesses[i, 0]);
+
+                recentMemoryAccesses[i, 1] = new Label() { Content = "-" };
+                Grid.SetColumn(recentMemoryAccesses[i, 1], 1);
+                Grid.SetRow(recentMemoryAccesses[i, 1], i + 2);
+                RecentMemory.Children.Add(recentMemoryAccesses[i, 1]);
             }
             #endregion
 
@@ -187,10 +203,23 @@ namespace LabTomasulo
                 Vis[i].Content = simulator.Regs[i];
             }
 
+            int counter = 0;
+            foreach (var rm in simulator.RecentMemory)
+            {
+                recentMemoryAccesses[counter, 0].Content = rm.Address;
+                recentMemoryAccesses[counter, 1].Content = rm.Value;
+                counter++;
+            }
+            for (int i = counter; i < Simulator.RecentMemorySize; i++)
+            {
+                recentMemoryAccesses[i, 0].Content = "-";
+                recentMemoryAccesses[i, 1].Content = "-";
+            }
+
             Clock_Lbl.Content = simulator.Clock;
             PC_Lbl.Content = simulator.PC;
             CompletedInstructions_Lbl.Content = simulator.CompletedInstructions;
-            CPI_Lbl.Content = simulator.CPI;
+            CPI_Lbl.Content = (float.IsNaN(simulator.CPI) ? "-" : simulator.CPI.ToString());
         }
     }
 }

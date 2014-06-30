@@ -19,6 +19,7 @@ namespace LabTomasulo
 
         public const int ReserveStationsAmount = 12;
         private const int RegistersAmount = 32;
+        public const int RecentMemorySize = 8;
 
         private readonly IReadOnlyList<SI> stationsConfig = new List<SI>()
         {
@@ -44,6 +45,7 @@ namespace LabTomasulo
         public ReserveStation[] RS { get; private set; }
         public int[] Regs { get; private set; }
         public RegisterStat[] RegisterStat { get; private set; }
+        public LinkedList<RecentMemory> RecentMemory { get; private set; }
         public int Clock { get; private set; }
         public int PC { get; set; }
         public int CompletedInstructions { get; set; }
@@ -214,15 +216,38 @@ namespace LabTomasulo
 
         public int GetMemoryAt(int address)
         {
+            UpdateRecentMemory(address, memory[address]);
             return memory[address];
         }
 
         public void SetMemoryAt(int address, int value)
         {
+            UpdateRecentMemory(address, value);
             memory[address] = value;
         }
 
         /* Private Methods */
+
+        private void UpdateRecentMemory(int address, int value)
+        {
+            RecentMemory rm = new RecentMemory(address, value);
+
+            var node = RecentMemory.Find(rm);
+
+            if (node == null)
+            {
+                RecentMemory.AddFirst(rm);
+                if (RecentMemory.Count > RecentMemorySize)
+                {
+                    RecentMemory.RemoveLast();
+                }
+            }
+            else
+            {
+                RecentMemory.Remove(node);
+                RecentMemory.AddFirst(rm);
+            }
+        }
 
         private void Initialize()
         {
@@ -234,6 +259,7 @@ namespace LabTomasulo
             IsCDBFree = true;
             IsBranching = false;
             bufferQueue = new Queue<int>();
+            RecentMemory = new LinkedList<RecentMemory>();
 
             RS = new ReserveStation[ReserveStationsAmount+1];
             Regs = new int[RegistersAmount];

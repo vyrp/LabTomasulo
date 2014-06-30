@@ -55,6 +55,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="src\Components\NullStation.cs" />
+    <Compile Include="src\Components\RecentMemory.cs" />
     <Compile Include="src\Components\RegisterStat.cs" />
     <Compile Include="src\Components\ReserveStation.cs" />
     <Compile Include="src\Instructions\Sw.cs" />

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,12 +24,16 @@ namespace LabTomasulo
 
     public partial class MainWindow : Window
     {
+        private const int SleepTime = 100;
+
         /* Fields */
 
         private Simulator simulator;
         private State state = State.None;
         private Label[] Qis = new Label[32];
         private Label[] Vis = new Label[32];
+        private bool allowedToRun;
+        private string fileName;
 
         /* Constructor */
 
@@ -111,23 +116,34 @@ namespace LabTomasulo
 
             if (dialog.ShowDialog() == true)
             {
-                FilePath_lbl.Content = dialog.FileName;
-                simulator.LoadFile(dialog.FileName);
+                fileName = dialog.FileName;
+                FilePath_lbl.Content = fileName;
+                simulator.LoadFile(fileName);
                 UpdateValues();
                 UpdateState(WindowAction.LoadFile);
             }
         }
 
-        private void PlayBtn_Click(object sender, RoutedEventArgs e)
+        private async void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
-            UpdateValues();
+            allowedToRun = true;
             UpdateState(WindowAction.Play);
-            while (!simulator.Completed)
+            await Task.Run(() =>
             {
-                simulator.Next();
+                while (!simulator.Completed && allowedToRun)
+                {
+                    simulator.Next();
+                    Dispatcher.Invoke(() =>
+                    {
+                        UpdateValues();
+                    });
+                    Thread.Sleep(SleepTime);
+                }
+            });
+            if (simulator.Completed)
+            {
+                UpdateState(WindowAction.Time);
             }
-            UpdateValues();
-            UpdateState(WindowAction.Time);
         }
 
         private void StepBtn_Click(object sender, RoutedEventArgs e)
@@ -139,11 +155,20 @@ namespace LabTomasulo
 
         private void PauseBtn_Click(object sender, RoutedEventArgs e)
         {
+            allowedToRun = false;
+            Thread.Sleep(SleepTime / 2);
             UpdateState(WindowAction.Pause);
         }
 
         private void StopBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (state == State.Running)
+            {
+                allowedToRun = false;
+                Thread.Sleep(SleepTime / 2);
+            }
+            simulator.LoadFile(fileName);
+            UpdateValues();
             UpdateState(WindowAction.Stop);
         }
 

@@ -27,6 +27,8 @@ namespace LabTomasulo
 
         private Simulator simulator;
         private State state = State.None;
+        private Label[] Qis = new Label[32];
+        private Label[] Vis = new Label[32];
 
         /* Constructor */
 
@@ -34,12 +36,47 @@ namespace LabTomasulo
         {
             InitializeComponent();
 
+            #region Registers Labels
+            Label lbl;
+            for (int i = 0; i < 4; i++)
+            {
+                lbl = new Label() { Content = "Qi" };
+                Grid.SetColumn(lbl, i * 3 + 1);
+                Grid.SetRow(lbl, 1);
+                Registers.Children.Add(lbl);
+
+                lbl = new Label() { Content = "Vi" };
+                Grid.SetColumn(lbl, i * 3 + 2);
+                Grid.SetRow(lbl, 1);
+                Registers.Children.Add(lbl);
+            }
+            for (int i = 0; i < 32; i++)
+            {
+                lbl = new Label() { Content = "R" + i };
+                Grid.SetColumn(lbl, i / 8 * 3);
+                Grid.SetRow(lbl, i % 8 + 2);
+                Registers.Children.Add(lbl);
+
+                Qis[i] = new Label() { Content = "-" };
+                Grid.SetColumn(Qis[i], i / 8 * 3 + 1);
+                Grid.SetRow(Qis[i], i % 8 + 2);
+                Registers.Children.Add(Qis[i]);
+
+                Vis[i] = new Label() { Content = "-" };
+                Grid.SetColumn(Vis[i], i / 8 * 3 + 2);
+                Grid.SetRow(Vis[i], i % 8 + 2);
+                Registers.Children.Add(Vis[i]);
+            }
+            #endregion
+
             PlayBtn.Content = "\u25B8";
             StepBtn.Content = "\u25B8\u2759";
             StopBtn.Content = "\u25FE";
             PauseBtn.Content = "\u2759\u2759";
 
             simulator = new Simulator();
+
+            ReserveStations.ItemsSource = simulator.RS.Skip(1);
         }
 
         private void UpdateState(WindowAction action)
@@ -112,9 +149,17 @@ namespace LabTomasulo
         private void UpdateValues()
         {
             ReserveStations.ItemsSource = simulator.RS.Skip(1);
-            Registers.ItemsSource = null;
-            CurrentClock.ItemsSource = null;
-            RecentMemory.ItemsSource = null;
+            
+            for (int i = 0; i < 32; i++)
+            {
+                Qis[i].Content = simulator.RegisterStat[i].Qi;
+                Vis[i].Content = simulator.Regs[i];
+            }
+
+            Clock_Lbl.Content = simulator.Clock;
+            PC_Lbl.Content = simulator.PC;
+            CompletedInstructions_Lbl.Content = simulator.CompletedInstructions;
+            CPI_Lbl.Content = simulator.CPI;
         }
     }
 }

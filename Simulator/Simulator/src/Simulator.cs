@@ -188,7 +188,7 @@ namespace LabTomasulo
             {
                 reachedEnd = true;
             }
-            else if (!IsBranching && instructions[PC / 4].TryEmit())
+            else if (!IsBranching && instructions[PC / 4].Clone().TryEmit())
             {
                 PC += 4;
             }

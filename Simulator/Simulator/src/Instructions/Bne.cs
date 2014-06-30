@@ -108,6 +108,11 @@ namespace LabTomasulo
             return true;
         }
 
+        public IInstruction Clone()
+        {
+            return new Bne(rs, rt, imm, simulator);
+        }
+
         public override string ToString()
         {
             return string.Format("BNE R{0}, R{1}, {2}", rs, rt, imm);

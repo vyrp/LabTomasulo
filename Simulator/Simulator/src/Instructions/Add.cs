@@ -133,6 +133,11 @@ namespace LabTomasulo
             return true;
         }
 
+        public IInstruction Clone()
+        {
+            return new Add(rs, rt, rd, simulator);
+        }
+
         public override string ToString()
         {
             return string.Format("ADD R{0}, R{1}, R{2}", rd, rs, rt);

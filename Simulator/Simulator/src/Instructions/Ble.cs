@@ -106,6 +106,11 @@ namespace LabTomasulo
             return true;
         }
 
+        public IInstruction Clone()
+        {
+            return new Ble(rs, rt, imm, simulator);
+        }
+
         public override string ToString()
         {
             return string.Format("BLE R{0}, R{1}, {2}", rs, rt, imm);

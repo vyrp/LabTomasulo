@@ -140,6 +140,11 @@ namespace LabTomasulo
             return true;
         }
 
+        public IInstruction Clone()
+        {
+            return new Mul(rs, rt, rd, simulator);
+        }
+
         public override string ToString()
         {
             return string.Format("MUL R{0}, R{1}, R{2}", rd, rs, rt);

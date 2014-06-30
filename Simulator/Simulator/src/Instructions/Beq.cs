@@ -99,13 +99,18 @@ namespace LabTomasulo
 
             if (result)
             {
-                simulator.PC = pc + 4 + imm;
+                simulator.PC = imm;// pc + 4 + imm;
             }
 
             RS[r].Busy = false;
 
             simulator.IsBranching = false;
             return true;
+        }
+
+        public IInstruction Clone()
+        {
+            return new Beq(rs, rt, imm, simulator);
         }
 
         public override string ToString()

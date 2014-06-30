@@ -25,6 +25,11 @@ namespace LabTomasulo
             throw new InvalidOperationException("Should not be called");
         }
 
+        public IInstruction Clone()
+        {
+            return new Nop();
+        }
+
         public override string ToString()
         {
             return "NOP";

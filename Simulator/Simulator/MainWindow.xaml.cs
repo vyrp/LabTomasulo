@@ -122,6 +122,12 @@ namespace LabTomasulo
         {
             UpdateValues();
             UpdateState(WindowAction.Play);
+            while (!simulator.Completed)
+            {
+                simulator.Next();
+            }
+            UpdateValues();
+            UpdateState(WindowAction.Time);
         }
 
         private void StepBtn_Click(object sender, RoutedEventArgs e)
@@ -152,7 +158,7 @@ namespace LabTomasulo
             
             for (int i = 0; i < 32; i++)
             {
-                Qis[i].Content = simulator.RegisterStat[i].Qi;
+                Qis[i].Content = simulator.RS[simulator.RegisterStat[i].Qi].ID;
                 Vis[i].Content = simulator.Regs[i];
             }
 

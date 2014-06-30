@@ -8,7 +8,10 @@ namespace LabTomasulo
 {
     class NullStation : ReserveStation
     {
-        public NullStation() : base(StationType.None, 0) { }
+        public NullStation() : base(StationType.None, 0)
+        {
+            ID = "-";
+        }
 
         public override bool Busy
         {

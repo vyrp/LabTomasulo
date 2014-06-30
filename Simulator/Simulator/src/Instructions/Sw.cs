@@ -112,6 +112,11 @@ namespace LabTomasulo
             return true;
         }
 
+        public IInstruction Clone()
+        {
+            return new Sw(rs, rt, imm, simulator);
+        }
+
         public override string ToString()
         {
             return string.Format("SW R{0}, {1}(R{2})", rt, imm, rs);

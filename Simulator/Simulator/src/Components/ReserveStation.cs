@@ -14,7 +14,7 @@ namespace LabTomasulo
 
         /* Properties */
 
-        public string ID { get; private set; }
+        public string ID { get; protected set; }
         public StationType Type { get; private set; }
         public virtual bool Busy { get; set; }
         public IInstruction Instruction
@@ -32,6 +32,11 @@ namespace LabTomasulo
         public int Qj { get; set; }
         public int Qk { get; set; }
         public int A { get; set; }
+
+        public string InstructionValue
+        {
+            get { return Instruction.ToString(); }
+        }
 
 
         /* Constructor */

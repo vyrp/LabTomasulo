@@ -90,11 +90,11 @@
             </Grid>
         </Grid>
         <Menu x:Name="File">
-            <MenuItem Header="File" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="26" >
-                <MenuItem Header="Open" Click="OpenBtn_Click"/>
-                <MenuItem Header="Exit" Click="ExitBtn_Click"/>
+            <MenuItem Header="_File" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="26" >
+                <MenuItem Header="_Open" Click="OpenBtn_Click"/>
+                <MenuItem Header="E_xit" Click="ExitBtn_Click"/>
             </MenuItem>
-            <MenuItem x:Name="HelpBtn" Header="Help" Click="HelpBtn_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="26"/>
+            <MenuItem x:Name="HelpBtn" Header="_Help" Click="HelpBtn_Click" VerticalContentAlignment="Stretch" HorizontalContentAlignment="Stretch" Height="26"/>
         </Menu>
         <Rectangle Fill="#FFF4F4F5" Stroke="Black" Grid.Row="2"/>
         <Label x:Name="FilePath_lbl" Content="Escolha um arquivo para compilar." Grid.Row="2" Margin="0,1,219,0" VerticalContentAlignment="Center" Padding="25,5,5,5"/>

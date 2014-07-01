@@ -179,20 +179,6 @@ namespace LabTomasulo
             Close();
         }
 
-        private void OpenBtn_Click(object sender, RoutedEventArgs e)
-        {
-            OpenFileDialog dialog = new OpenFileDialog();
-
-            if (dialog.ShowDialog() == true)
-            {
-                fileName = dialog.FileName;
-                FilePath_lbl.Content = fileName;
-                simulator.LoadFile(fileName);
-                UpdateValues();
-                UpdateState(WindowAction.LoadFile);
-            }
-        }
-
         private async void PlayBtn_Click(object sender, RoutedEventArgs e)
         {
             allowedToRun = true;
@@ -250,6 +236,25 @@ namespace LabTomasulo
         private void SettingsBtn_Click(object sender, RoutedEventArgs e)
         {
             new SettingsWindow() { Owner = this }.ShowDialog();
+        }
+
+        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+
+            if (dialog.ShowDialog() == true)
+            {
+                fileName = dialog.FileName;
+                FilePath_lbl.Content = fileName;
+                simulator.LoadFile(fileName);
+                UpdateValues();
+                UpdateState(WindowAction.LoadFile);
+            }
         }
 
         private void UpdateValues()

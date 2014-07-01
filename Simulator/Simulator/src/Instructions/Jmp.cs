@@ -71,6 +71,7 @@ namespace LabTomasulo
             simulator.CompletedInstructions++;
             simulator.IsBranching = false;
             simulator.PC = imm;
+            simulator.UpdateCurrentInstruction(imm);
 
             RS[r].Busy = false;
             

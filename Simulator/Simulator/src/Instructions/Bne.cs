@@ -99,7 +99,8 @@ namespace LabTomasulo
 
             if (result)
             {
-                simulator.PC = pc + 4 + imm;
+                simulator.PC = imm;
+                simulator.UpdateCurrentInstruction(imm);
             }
 
             RS[r].Busy = false;

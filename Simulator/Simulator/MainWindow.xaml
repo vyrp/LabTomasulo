@@ -33,8 +33,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="150"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="100"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -58,18 +58,18 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Label Content="Estações de Reserva" Grid.Row="0" Grid.ColumnSpan="10" HorizontalAlignment="Center" FontWeight="Bold"/>
-                <Label Content="ID" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center"/>
-                <Label Content="Tipo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center"/>
-                <Label Content="Busy" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center"/>
-                <Label Content="Instrução" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center"/>
-                <Label Content="Estado" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center"/>
-                <Label Content="Vj" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Center"/>
-                <Label Content="Vk" Grid.Row="1" Grid.Column="6" HorizontalAlignment="Center"/>
-                <Label Content="Qj" Grid.Row="1" Grid.Column="7" HorizontalAlignment="Center"/>
-                <Label Content="Qk" Grid.Row="1" Grid.Column="8" HorizontalAlignment="Center"/>
-                <Label Content="A" Grid.Row="1" Grid.Column="9" HorizontalAlignment="Center"/>
+                <Label Content="ID" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Tipo" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Busy" Grid.Row="1" Grid.Column="2" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Instrução" Grid.Row="1" Grid.Column="3" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Estado" Grid.Row="1" Grid.Column="4" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Vj" Grid.Row="1" Grid.Column="5" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Vk" Grid.Row="1" Grid.Column="6" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Qj" Grid.Row="1" Grid.Column="7" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="Qk" Grid.Row="1" Grid.Column="8" HorizontalAlignment="Center" FontStyle="Italic"/>
+                <Label Content="A" Grid.Row="1" Grid.Column="9" HorizontalAlignment="Center" FontStyle="Italic"/>
             </Grid>
-            <Grid x:Name="Registers" Grid.Row="1" ShowGridLines="False">
+            <Grid x:Name="Registers" Grid.Row="1" ShowGridLines="False" Margin="10,0,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
@@ -98,26 +98,64 @@
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="12" Content="Registers" HorizontalAlignment="Center" FontWeight="Bold"/>
             </Grid>
-            <Grid Grid.Column="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Content="Clock corrente:"/>
-                <Label Grid.Row="1" Grid.Column="0" Content="PC:"/>
-                <Label Grid.Row="2" Grid.Column="0" Content="Número de instruções concluídas:"/>
-                <Label Grid.Row="3" Grid.Column="0" Content="Clocks por instrução (CPI):"/>
-                <Label Grid.Row="0" Grid.Column="1" Content="-" x:Name="Clock_Lbl"/>
-                <Label Grid.Row="1" Grid.Column="1" Content="-" x:Name="PC_Lbl"/>
-                <Label Grid.Row="2" Grid.Column="1" Content="-" x:Name="CompletedInstructions_Lbl"/>
-                <Label Grid.Row="3" Grid.Column="1" Content="-" x:Name="CPI_Lbl"/>
-            </Grid>
+            <StackPanel Grid.Column="1" Margin="10,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="Listagem do Programa" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" FontWeight="Bold"/>
+                    <Label Name="Line0Number" Content="0:" Grid.Column="0" Grid.Row="1"/>
+                    <Label Name="Line0Instruction" Content="-" Grid.Column="1" Grid.Row="1"/>
+                    <Label Name="Line1Number" Content="1:" Grid.Column="0" Grid.Row="2"/>
+                    <Label Name="Line1Instruction" Content="-" Grid.Column="1" Grid.Row="2"/>
+                    <Label Name="Line2Number" Content="2:" Grid.Column="0" Grid.Row="3"/>
+                    <Label Name="Line2Instruction" Content="-" Grid.Column="1" Grid.Row="3"/>
+                    <Label Name="Line3Number" Content="3:" Grid.Column="0" Grid.Row="4" Background="#FFCCCCCC"/>
+                    <Label Name="Line3Instruction" Content="-" Grid.Column="1" Grid.Row="4" Background="#FFCCCCCC"/>
+                    <Label Name="Line4Number" Content="4:" Grid.Column="0" Grid.Row="5"/>
+                    <Label Name="Line4Instruction" Content="-" Grid.Column="1" Grid.Row="5"/>
+                    <Label Name="Line5Number" Content="5:" Grid.Column="0" Grid.Row="6"/>
+                    <Label Name="Line5Instruction" Content="-" Grid.Column="1" Grid.Row="6"/>
+                    <Label Name="Line6Number" Content="6:" Grid.Column="0" Grid.Row="7"/>
+                    <Label Name="Line6Instruction" Content="-" Grid.Column="1" Grid.Row="7"/>
+                </Grid>
+                <Separator/>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Content="Clock corrente:"/>
+                    <Label Grid.Row="1" Grid.Column="0" Content="PC:"/>
+                    <Label Grid.Row="2" Grid.Column="0" Content="Número de instruções concluídas:"/>
+                    <Label Grid.Row="3" Grid.Column="0" Content="Clocks por instrução (CPI):"/>
+                    <Label Grid.Row="4" Grid.Column="0" Content="Finalizado:"/>
+                    <Label Grid.Row="0" Grid.Column="1" Content="-" x:Name="Clock_Lbl"/>
+                    <Label Grid.Row="1" Grid.Column="1" Content="-" x:Name="PC_Lbl"/>
+                    <Label Grid.Row="2" Grid.Column="1" Content="-" x:Name="CompletedInstructions_Lbl"/>
+                    <Label Grid.Row="3" Grid.Column="1" Content="-" x:Name="CPI_Lbl"/>
+                    <Label Grid.Row="4" Grid.Column="1" Content="-" x:Name="Completed_Lbl" FontWeight="Bold"/>
+                </Grid>
+                <Separator/>
+            </StackPanel>
             <Grid x:Name="RecentMemory" Grid.Column="1" Margin="0,0,0,-1" Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
@@ -135,7 +173,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Memória recente usada" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="Memória Recentemente Usada" HorizontalAlignment="Center" FontWeight="Bold"/>
                 <Label Grid.Row="1" Grid.Column="0" Content="Endereço" HorizontalAlignment="Center"/>
                 <Label Grid.Row="1" Grid.Column="1" Content="Valor" HorizontalAlignment="Center"/>
             </Grid>

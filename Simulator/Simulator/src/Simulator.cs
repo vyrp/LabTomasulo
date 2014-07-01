@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using LabTomasulo.Arquitetura;
 
 using SI = System.Collections.Generic.KeyValuePair<LabTomasulo.StationType, int>;
+using SS = System.Collections.Generic.KeyValuePair<string, string>;
 
 namespace LabTomasulo
 {
@@ -38,7 +39,6 @@ namespace LabTomasulo
         private Queue<int> bufferQueue;
         private MainMemory mainMemory;
         private Cache L2;
-        
 
         /* Properties */
 
@@ -51,6 +51,7 @@ namespace LabTomasulo
         public int[] Regs { get; private set; }
         public RegisterStat[] RegisterStat { get; private set; }
         public LinkedList<RecentMemory> RecentMemory { get; private set; }
+        public LinkedList<SS> CurrentInstructions { get; private set; }
         public int Clock { get; private set; }
         public int PC { get; set; }
         public int CompletedInstructions { get; set; }
@@ -180,6 +181,8 @@ namespace LabTomasulo
 
                 instructions.Add(instruction);
             }
+
+            UpdateCurrentInstruction(0);
         }
 
         public void Next()
@@ -198,6 +201,16 @@ namespace LabTomasulo
             else if (!IsBranching && instructions[PC / 4].Clone().TryEmit())
             {
                 PC += 4;
+                CurrentInstructions.RemoveFirst();
+                int last = PC / 4 + 3;
+                if (last < instructions.Count)
+                {
+                    CurrentInstructions.AddLast(new SS(last.ToString(), instructions[last].ToString()));
+                }
+                else
+                {
+                    CurrentInstructions.AddLast(new SS("-", "-"));
+                }
             }
 
             Clock++;
@@ -229,6 +242,27 @@ namespace LabTomasulo
         {
             UpdateRecentMemory(address, value);
             memory[address] = value;
+        }
+
+        public void UpdateCurrentInstruction(int newPC)
+        {
+            CurrentInstructions.Clear();
+            newPC /= 4;
+            newPC -= 3;
+
+            int counter = 0;
+            for (; newPC + counter < 0; counter++)
+            {
+                CurrentInstructions.AddLast(new SS("-", "-"));
+            }
+            for (int i = newPC + counter; counter < 7 && i < instructions.Count; counter++, i++)
+            {
+                CurrentInstructions.AddLast(new SS(i.ToString(), instructions[i].ToString()));
+            }
+            for (; counter < 7; counter++)
+            {
+                CurrentInstructions.AddLast(new SS("-", "-"));
+            }
         }
 
         /* Private Methods */
@@ -269,6 +303,7 @@ namespace LabTomasulo
             IsBranching = false;
             bufferQueue = new Queue<int>();
             RecentMemory = new LinkedList<RecentMemory>();
+            CurrentInstructions = new LinkedList<SS>();
 
             RS = new ReserveStation[ReserveStationsAmount+1];
             Regs = new int[RegistersAmount];

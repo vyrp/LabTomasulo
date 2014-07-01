@@ -31,6 +31,7 @@ namespace LabTomasulo
         private Label[,] RS = new Label[12, 10];
         private Label[] Qis = new Label[32];
         private Label[] Vis = new Label[32];
+        private Label[,] currentInstructions = new Label[8, 2];
         private Label[,] recentMemoryAccesses = new Label[Simulator.RecentMemorySize, 2];
         private bool allowedToRun;
         private string fileName;
@@ -55,12 +56,12 @@ namespace LabTomasulo
             Label lbl;
             for (int i = 0; i < 4; i++)
             {
-                lbl = new Label() { Content = "Qi" };
+                lbl = new Label() { Content = "Qi", FontStyle=FontStyles.Italic };
                 Grid.SetColumn(lbl, i * 3 + 1);
                 Grid.SetRow(lbl, 1);
                 Registers.Children.Add(lbl);
 
-                lbl = new Label() { Content = "Vi" };
+                lbl = new Label() { Content = "Vi", FontStyle = FontStyles.Italic };
                 Grid.SetColumn(lbl, i * 3 + 2);
                 Grid.SetRow(lbl, 1);
                 Registers.Children.Add(lbl);
@@ -110,6 +111,23 @@ namespace LabTomasulo
                     ReserveStations.Children.Add(RS[i, j]);
                 }
             }
+            #endregion
+
+            #region Current Instructions
+            currentInstructions[0, 0] = Line0Number;
+            currentInstructions[0, 1] = Line0Instruction;
+            currentInstructions[1, 0] = Line1Number;
+            currentInstructions[1, 1] = Line1Instruction;
+            currentInstructions[2, 0] = Line2Number;
+            currentInstructions[2, 1] = Line2Instruction;
+            currentInstructions[3, 0] = Line3Number;
+            currentInstructions[3, 1] = Line3Instruction;
+            currentInstructions[4, 0] = Line4Number;
+            currentInstructions[4, 1] = Line4Instruction;
+            currentInstructions[5, 0] = Line5Number;
+            currentInstructions[5, 1] = Line5Instruction;
+            currentInstructions[6, 0] = Line6Number;
+            currentInstructions[6, 1] = Line6Instruction;
             #endregion
 
             PlayBtn.Content = "\u25B8";
@@ -230,7 +248,9 @@ namespace LabTomasulo
 
         private void AboutBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Programa desenvolvido para o projeto 2 da matéria de CES-25", "About");
+            MessageBox.Show("Programa desenvolvido para o Projeto II da matéria de CES-25, o simulador de MIPS superescalar.\n" +
+                "\nAlunos:\n  * Diogo Freitas\n  * Felipe Pereira\n  * Fernando Fonseca\n  * Márcio Paiva\n  * Samuel Flávio\n  * Vitor Carvalho",
+                "About");
         }
 
         private void SettingsBtn_Click(object sender, RoutedEventArgs e)
@@ -259,6 +279,7 @@ namespace LabTomasulo
 
         private void UpdateValues()
         {
+            // RS
             for (int i = 0; i < 12; i++)
             {
                 for (int j = 0; j < 10; j++)
@@ -266,12 +287,15 @@ namespace LabTomasulo
                     RS[i, j].Content = GetRSElement(i, j, true);
                 }
             }
+
+            // Registers
             for (int i = 0; i < 32; i++)
             {
                 Qis[i].Content = simulator.RS[simulator.RegisterStat[i].Qi].ID;
                 Vis[i].Content = simulator.Regs[i];
             }
 
+            // Recent Memory
             int counter = 0;
             foreach (var rm in simulator.RecentMemory)
             {
@@ -285,10 +309,22 @@ namespace LabTomasulo
                 recentMemoryAccesses[i, 1].Content = "-";
             }
 
+            // Current instructions
+
+            counter = 0;
+            foreach (var line in simulator.CurrentInstructions)
+            {
+                currentInstructions[counter, 0].Content = line.Key + ":";
+                currentInstructions[counter, 1].Content = line.Value;
+                counter++;
+            }
+
+            // Extras
             Clock_Lbl.Content = simulator.Clock;
             PC_Lbl.Content = simulator.PC;
             CompletedInstructions_Lbl.Content = simulator.CompletedInstructions;
             CPI_Lbl.Content = (float.IsNaN(simulator.CPI) ? "-" : simulator.CPI.ToString());
+            Completed_Lbl.Content = simulator.Completed;
         }
     }
 }

@@ -269,9 +269,22 @@ namespace LabTomasulo
 
             if (dialog.ShowDialog() == true)
             {
+                try
+                {
+                    simulator.LoadFile(dialog.FileName);
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show(
+                        "Houve uma falha no carregamento do arquivo. Tente novamente.",
+                        "Erro de Arquivo",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error);
+                    return;
+                }
+
                 fileName = dialog.FileName;
-                FilePath_lbl.Content = fileName;
-                simulator.LoadFile(fileName);
+                FilePath_lbl.Content = dialog.FileName;
                 UpdateValues();
                 UpdateState(WindowAction.LoadFile);
             }

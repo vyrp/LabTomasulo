@@ -16,7 +16,7 @@
                 <MenuItem Command="Open"/>
                 <MenuItem Header="E_xit" Click="ExitBtn_Click"/>
             </MenuItem>
-            <MenuItem x:Name="SettingsBtn" Header="_Settings..." Click="SettingsBtn_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23"/>
+            <MenuItem x:Name="SettingsBtn" Header="_Settings" Click="SettingsBtn_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23"/>
             <MenuItem x:Name="AboutBtn" Header="_About" Click="AboutBtn_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23"/>
         </Menu>
         <Grid Grid.Row="1">
@@ -101,7 +101,7 @@
             <StackPanel Grid.Column="1" Margin="10,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="30"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>

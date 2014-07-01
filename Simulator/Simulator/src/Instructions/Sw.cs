@@ -14,7 +14,8 @@ namespace LabTomasulo
         /* Fields */
 
         private int r;
-        private int passedClocks;
+        private int passedClocks = 0;
+        private int clocks = -1;
         private readonly int rs;
         private readonly int rt;
         private readonly int imm;
@@ -31,7 +32,6 @@ namespace LabTomasulo
             this.rt = rt;
             this.imm = imm;
             this.simulator = simulator;
-            this.passedClocks = 0;
 
             RS = simulator.RS;
             RegisterStat = simulator.RegisterStat;
@@ -87,6 +87,7 @@ namespace LabTomasulo
             {
                 simulator.IsHardwareFree[HW] = false;
                 RS[r].A = RS[r].Vj + RS[r].A;
+                clocks = (MainWindow.UseCache ? simulator.L1.write(RS[r].A) : Clocks);
                 passedClocks++;
             }
             else if (passedClocks > 0)
@@ -94,7 +95,7 @@ namespace LabTomasulo
                 passedClocks++;
             }
 
-            return passedClocks == Clocks;
+            return passedClocks == clocks;
         }
 
         public bool TryWrite()

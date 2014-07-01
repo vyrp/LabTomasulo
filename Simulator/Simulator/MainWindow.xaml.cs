@@ -36,11 +36,16 @@ namespace LabTomasulo
         private bool allowedToRun;
         private string fileName;
 
+        /* Properties */
+
+        public static bool UseCache { get; private set; }
+
         /* Constructor */
 
         public MainWindow()
         {
             InitializeComponent();
+            UseCache = true;
 
             #region Registers Labels
             Label lbl;

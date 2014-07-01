@@ -8,6 +8,7 @@ using System.Text;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using LabTomasulo.Arquitetura;
 
 using SI = System.Collections.Generic.KeyValuePair<LabTomasulo.StationType, int>;
 
@@ -35,6 +36,9 @@ namespace LabTomasulo
         private List<IInstruction> instructions;
         private bool reachedEnd;
         private Queue<int> bufferQueue;
+        private MainMemory mainMemory;
+        private Cache L2;
+        
 
         /* Properties */
 
@@ -42,6 +46,7 @@ namespace LabTomasulo
         public bool IsCDBFree { get; set; }
         public bool IsBranching { get; set; }
 
+        public Cache L1 { get; private set; }
         public ReserveStation[] RS { get; private set; }
         public int[] Regs { get; private set; }
         public RegisterStat[] RegisterStat { get; private set; }
@@ -254,6 +259,10 @@ namespace LabTomasulo
             memory = new int[4 * 1024];
             instructions = new List<IInstruction>();
             reachedEnd = false;
+
+            mainMemory = new MainMemory(140);
+            L2 = new Cache(1024 * 1024, 64, 7, 16, mainMemory) { writeOnReplace = false };
+            L1 = new Cache(64 * 1024, 64, 2, 2, L2) { writeOnReplace = true };
 
             IsHardwareFree = new[] { false, true, true, true, true };
             IsCDBFree = true;

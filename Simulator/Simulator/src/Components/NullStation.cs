@@ -10,7 +10,7 @@ namespace LabTomasulo
     {
         public NullStation() : base(StationType.None, 0)
         {
-            ID = "-";
+            ID = "0";
         }
 
         public override bool Busy

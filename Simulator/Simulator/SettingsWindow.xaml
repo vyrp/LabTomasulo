@@ -1,7 +1,7 @@
 ﻿<Window x:Class="LabTomasulo.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="SettingsWindow" Height="200" Width="400" ResizeMode="NoResize">
+        Title="Configurações" Height="200" Width="420" ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -20,8 +20,8 @@
         <Label Content="Play Passo a Passo" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" />
         <CheckBox Name="NotInstPlayChk" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-        <Label Content="Velocidade do Play" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" />
-        <Slider Name="SpeedSlider" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsEnabled="{Binding ElementName=NotInstPlayChk, Path=IsChecked}" Minimum="50" Maximum="1000" AutoToolTipPlacement="TopLeft" LargeChange="46" SmallChange="50" TickFrequency="50" TickPlacement="BottomRight" Value="100" Margin="0,0,10,0" ToolTip="{Binding ElementName=SpeedSlider, Path=Value}" IsSnapToTickEnabled="True"/>
+        <Label Content="Velocidade do Play (ms)" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" />
+        <Slider Name="SpeedSlider" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsEnabled="{Binding ElementName=NotInstPlayChk, Path=IsChecked}" Minimum="50" Maximum="1000" AutoToolTipPlacement="TopLeft" LargeChange="46" SmallChange="50" TickFrequency="50" TickPlacement="BottomRight" Value="100" Margin="10,0,10,0" ToolTip="{Binding ElementName=SpeedSlider, Path=Value}" IsSnapToTickEnabled="True"/>
 
         <Grid Grid.Column="1" Grid.Row="3" Margin="0" HorizontalAlignment="Right">
             <Grid.ColumnDefinitions>

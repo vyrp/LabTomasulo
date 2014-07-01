@@ -121,8 +121,8 @@
                     <Label Name="Line1Instruction" Content="-" Grid.Column="1" Grid.Row="2"/>
                     <Label Name="Line2Number" Content="2:" Grid.Column="0" Grid.Row="3"/>
                     <Label Name="Line2Instruction" Content="-" Grid.Column="1" Grid.Row="3"/>
-                    <Label Name="Line3Number" Content="3:" Grid.Column="0" Grid.Row="4" Background="#FFCCCCCC"/>
-                    <Label Name="Line3Instruction" Content="-" Grid.Column="1" Grid.Row="4" Background="#FFCCCCCC"/>
+                    <Label Name="Line3Number" Content="3:" Grid.Column="0" Grid.Row="4" Background="#FFCCCCCC" ToolTip="Instrução que será emitida"/>
+                    <Label Name="Line3Instruction" Content="-" Grid.Column="1" Grid.Row="4" Background="#FFCCCCCC" ToolTip="Instrução que será emitida"/>
                     <Label Name="Line4Number" Content="4:" Grid.Column="0" Grid.Row="5"/>
                     <Label Name="Line4Instruction" Content="-" Grid.Column="1" Grid.Row="5"/>
                     <Label Name="Line5Number" Content="5:" Grid.Column="0" Grid.Row="6"/>

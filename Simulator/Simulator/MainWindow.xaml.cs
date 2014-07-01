@@ -191,11 +191,23 @@ namespace LabTomasulo
         {
             allowedToRun = true;
             UpdateState(WindowAction.Play);
+
+            string error = "";
             await Task.Run(() =>
             {
                 while (!simulator.Completed && allowedToRun)
                 {
-                    simulator.Next();
+
+                    try
+                    {
+                        simulator.Next();
+                    }
+                    catch (InvalidMemoryAccessException ex)
+                    {
+                        error = ex.Message;
+                        break;
+                    }
+                    
                     if (IsNotInstantaneousPlay)
                     {
                         Dispatcher.Invoke(() => { UpdateValues(); });
@@ -203,6 +215,17 @@ namespace LabTomasulo
                     }
                 }
             });
+            if (error != "")
+            {
+                MessageBox.Show(
+                    "O programa executado acessou memória inválida.\n(" + error + ")",
+                    "Memória inválida",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+                
+                simulator.LoadFile(fileName);
+                UpdateState(WindowAction.LoadFile);
+            }
             UpdateValues();
             if (simulator.Completed)
             {

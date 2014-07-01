@@ -14,13 +14,13 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         
-        <Label Content="Use Cache" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0" />
+        <Label Content="Usar Cache" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" Margin="10,0,0,0" />
         <CheckBox Name="UseCacheChk" Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Center" />
         
-        <Label Content="Not Instantaneous Play" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" />
+        <Label Content="Play Passo a Passo" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="10,0,0,0" />
         <CheckBox Name="NotInstPlayChk" Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" />
 
-        <Label Content="Play Speed" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" />
+        <Label Content="Velocidade do Play" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="10,0,0,0" />
         <Slider Name="SpeedSlider" Grid.Column="1" Grid.Row="2" VerticalAlignment="Center" IsEnabled="{Binding ElementName=NotInstPlayChk, Path=IsChecked}" Minimum="50" Maximum="1000" AutoToolTipPlacement="TopLeft" LargeChange="46" SmallChange="50" TickFrequency="50" TickPlacement="BottomRight" Value="100" Margin="0,0,10,0" ToolTip="{Binding ElementName=SpeedSlider, Path=Value}" IsSnapToTickEnabled="True"/>
 
         <Grid Grid.Column="1" Grid.Row="3" Margin="0" HorizontalAlignment="Right">

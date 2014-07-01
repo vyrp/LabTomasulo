@@ -263,6 +263,11 @@ namespace LabTomasulo
 
         private void UpdateRecentMemory(int address, int value)
         {
+            if (address < 0 || address >= memory.Length)
+            {
+                throw new InvalidMemoryAccessException("Address = " + address);
+            }
+
             RecentMemory rm = new RecentMemory(address, value);
 
             var node = RecentMemory.Find(rm);

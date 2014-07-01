@@ -151,7 +151,7 @@ namespace LabTomasulo
                     {
                         int rs, rt, imm;
                         ParseInstructionTypeI(line, out rs, out rt, out imm);
-                        instruction = new Ble(rs, rt, imm, this);
+                        instruction = new Bne(rs, rt, imm, this);
                         break;
                     }
                     case "100011":

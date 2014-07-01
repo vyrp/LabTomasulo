@@ -96,7 +96,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="12" Content="Registers" HorizontalAlignment="Center" FontWeight="Bold"/>
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="12" Content="Registradores" HorizontalAlignment="Center" FontWeight="Bold"/>
             </Grid>
             <StackPanel Grid.Column="1" Margin="10,0">
                 <Grid>

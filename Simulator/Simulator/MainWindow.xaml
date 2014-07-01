@@ -13,7 +13,8 @@
                 <MenuItem Header="_Open" Click="OpenBtn_Click"/>
                 <MenuItem Header="E_xit" Click="ExitBtn_Click"/>
             </MenuItem>
-            <MenuItem x:Name="HelpBtn" Header="_Help" Click="HelpBtn_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23"/>
+            <MenuItem x:Name="SettingsBtn" Header="_Settings..." Click="SettingsBtn_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23"/>
+            <MenuItem x:Name="AboutBtn" Header="_About" Click="AboutBtn_Click" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Height="23"/>
         </Menu>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>

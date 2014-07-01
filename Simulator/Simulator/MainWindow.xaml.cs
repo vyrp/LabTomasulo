@@ -24,8 +24,6 @@ namespace LabTomasulo
 
     public partial class MainWindow : Window
     {
-        private const int SleepTime = 100;
-
         /* Fields */
 
         private Simulator simulator;
@@ -39,14 +37,18 @@ namespace LabTomasulo
 
         /* Properties */
 
-        public static bool UseCache { get; private set; }
+        public static bool UseCache { get; set; }
+        public static bool IsNotInstantaneousPlay { get; set; }
+        public static int PlaySpeed { get; set; }
 
         /* Constructor */
 
         public MainWindow()
         {
             InitializeComponent();
-            UseCache = true;
+            UseCache = false;
+            IsNotInstantaneousPlay = false;
+            PlaySpeed = 100;
             simulator = new Simulator();
 
             #region Registers Labels
@@ -200,16 +202,16 @@ namespace LabTomasulo
                 while (!simulator.Completed && allowedToRun)
                 {
                     simulator.Next();
-                    /*Dispatcher.Invoke(() =>
+                    if (IsNotInstantaneousPlay)
                     {
-                        UpdateValues();
-                    });
-                    Thread.Sleep(SleepTime);*/
+                        Dispatcher.Invoke(() => { UpdateValues(); });
+                        Thread.Sleep(PlaySpeed);
+                    }
                 }
             });
+            UpdateValues();
             if (simulator.Completed)
             {
-                UpdateValues();
                 UpdateState(WindowAction.Time);
             }
         }
@@ -224,7 +226,7 @@ namespace LabTomasulo
         private void PauseBtn_Click(object sender, RoutedEventArgs e)
         {
             allowedToRun = false;
-            Thread.Sleep(SleepTime / 2);
+            Thread.Sleep(PlaySpeed / 2);
             UpdateState(WindowAction.Pause);
         }
 
@@ -233,16 +235,21 @@ namespace LabTomasulo
             if (state == State.Running)
             {
                 allowedToRun = false;
-                Thread.Sleep(SleepTime / 2);
+                Thread.Sleep(PlaySpeed / 2);
             }
             simulator.LoadFile(fileName);
             UpdateValues();
             UpdateState(WindowAction.Stop);
         }
 
-        private void HelpBtn_Click(object sender, RoutedEventArgs e)
+        private void AboutBtn_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Foi mal, ainda não posso te ajudar", "Help");
+            MessageBox.Show("Programa desenvolvido para o projeto 2 da matéria de CES-25", "About");
+        }
+
+        private void SettingsBtn_Click(object sender, RoutedEventArgs e)
+        {
+            new SettingsWindow() { Owner = this }.ShowDialog();
         }
 
         private void UpdateValues()
